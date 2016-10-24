@@ -5,21 +5,23 @@
 
 
 elements = document.getElementsByClassName('box');
-for(i=0;i<elements.length;i++){
+for(i=0;i<elements.length-2;i++){
 	element=elements[i];
 	element.addEventListener('click',function(){
 	// Get the ID of the clicked element
 	id=this.id;
 	rowIndex=id.slice(0,1);
-	console.log(rowIndex);
+	console.log("rowIndex:" + rowIndex + "/id:" + id);
 	console.log(this.className);
 	switch(rowIndex){
 		case '1':
+		console.log(this.className.indexOf('green'))
+		console.log(this.className)
 			if (this.className.indexOf('green') ===-1){
 				this.className+=' green';
 
 			}else{
-				this.className=this.className.replace('green','');
+				this.className=this.className.replace(' green','');
 			}
 			break;
 		case '2':
@@ -43,5 +45,3 @@ for(i=0;i<elements.length;i++){
 
 	});
 }
-
-
