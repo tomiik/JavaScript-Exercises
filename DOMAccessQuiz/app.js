@@ -43,14 +43,8 @@ function hide() {
 function changeBackColor(color, className) {
 
   elements = document.getElementsByClassName(className);
-  if(className==="box1"){
-    for(var i = 0; i < elements.length; i++){
-      elements[i].style.backgroundColor = "green";
-    }
-  }else {
-    for(var i = 0; i < elements.length; i++){
-      elements[i].style.backgroundColor = "blue";
-    }
+  for(var i = 0; i < elements.length; i++){
+    elements[i].style.backgroundColor = color;
   }
 
 }
