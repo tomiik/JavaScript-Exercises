@@ -55,7 +55,7 @@ $(document).ready(function(){
 			$(this).toggleClass("green");
 			break;
 			case '2':
-			$(this).toggleClass("yellow");
+			$(this).toggleClass("blue");
 			break;
 			case '3':
 			$(this).toggleClass("orange");
