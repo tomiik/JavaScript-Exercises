@@ -10,7 +10,7 @@
 #car {
   width: 35px;
   height: 25px;
-  position: absolute;
   background-image: url('./images/omcar.png');
+  position: absolute;
   background-size: cover;
 }
