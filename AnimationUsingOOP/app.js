@@ -5,7 +5,7 @@ class Car{
 		this.domElement=inputDomElement;
 		this.domElement.css('left','10px');
 		this.domElement.css('top','10px');
-		this.newDirection='left';
+		this.direction=90;
 		this.increment=true;
 		this.model=model;
 		this.currentSpeed=1;
@@ -15,18 +15,27 @@ class Car{
 		console.log(this.currentSpeed);
 		// console.log(this.newDirection);
 		// console.log(this.increment);
-		var currentPos = parseInt(this.domElement.css(this.newDirection));
+		var currentPosX = parseInt(this.domElement.css("left"));
+		var currentPosY = parseInt(this.domElement.css("top"));
 		// console.log(this.newDirection);
+		console.log("currentPos:" + currentPosX + "," + currentPosY);
 		var domElement=this.domElement;
 		var carObj=this;
 		function moveCar(){
-			if (carObj.increment){
-				currentPos=currentPos+carObj.currentSpeed;
-			}else{
-				currentPos=currentPos-carObj.currentSpeed;
-				//currentPos--;
-			}
-			domElement.css(carObj.newDirection,currentPos+'px');
+			console.log(carObj.direction);
+			var carDirection = parseInt(carObj.direction);
+			var d = (2*Math.PI) * (carDirection/360);
+			var directionX = Math.sin(d);
+			var directionY = Math.cos(d);
+
+			console.log(directionX + "," + directionY);
+
+			currentPosX += carObj.currentSpeed * directionX;
+			currentPosY += carObj.currentSpeed * directionY;
+			domElement.css("transform", "rotate(" + (-carDirection-270) + "deg)");
+
+			domElement.css("left",currentPosX+'px');
+			domElement.css("top",currentPosY+'px');
 		}
 
 	}
@@ -35,30 +44,15 @@ class Car{
 			clearInterval(this.setIntervalId);
 		}
 	}
-	changeDirection(direction){
-		switch(direction){
-			case "left":
-				this.increment=false;
-				this.newDirection="left";
-				break;
-			case "right":
-				this.increment=true;
-				this.newDirection="left";			
-				break;
-			case "up":
-				this.increment=false;
-				this.newDirection="top";			
-				break;
-			case "down":
-				this.increment=true;
-				this.newDirection="top";			
-				break;
-		}
 
-	}
 	increaseSpeed(){
 		if (this.currentSpeed<=5){
 			this.currentSpeed++;
+		}
+	}
+	decreaseSpeed(){
+		if (this.currentSpeed>-1){
+			this.currentSpeed--;
 		}
 	}
 }
@@ -69,24 +63,14 @@ class ControlSystem{
 	}
 	turnRight(){
 		this.car.stop();
-		this.car.changeDirection("right");
+		this.car.direction-=10;
 		this.car.move();
 	}
 	turnLeft(){
 		this.car.stop();
-		this.car.changeDirection("left");
+		this.car.direction+=10;
 		this.car.move();
 	}
-	turnUp(){
-		this.car.stop();
-		this.car.changeDirection("up");
-		this.car.move();
-	}
-	turnDown(){
-		this.car.stop();
-		this.car.changeDirection("down");
-		this.car.move();
-	}	
 	start(){
 		this.car.move();
 	}
@@ -94,8 +78,13 @@ class ControlSystem{
 		this.car.stop();
 	}
 	accelerate(){
-		//this.car.stop();
+		this.car.stop();
 		this.car.increaseSpeed();
+		this.car.move();
+	}
+	slowDown(){
+		//this.car.stop();
+		this.car.decreaseSpeed();
 		//this.car.move();
 	}
 }
@@ -109,6 +98,7 @@ $(document).ready(function(){
 	var objControlSystem = new ControlSystem(carObject);
 	console.log(objControlSystem);
 
+
 	$(document).keydown(function(key){
 		console.log(key.keyCode);
 		switch(key.keyCode){
@@ -119,11 +109,11 @@ $(document).ready(function(){
 			objControlSystem.turnRight();
 			break;
 			case 38:// Up arrow
-			objControlSystem.turnUp();
-			break;	
+			objControlSystem.accelerate();
+			break;
 			case 40:// Down arrow
-			objControlSystem.turnDown();
-			break;						
+			objControlSystem.slowDown();
+			break;
 			case 32://When space, stop the car
 			objControlSystem.stop();
 			break;
@@ -131,11 +121,5 @@ $(document).ready(function(){
 			objControlSystem.accelerate();
 			break;
 		}
-
 	});
 });
-
-
-
-
-
